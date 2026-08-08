@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { Type, Trash2, FileText } from "lucide-react";
+import { Trash2, FileText } from "lucide-react";
 
 export function CaseConverterTool() {
   const [input, setInput] = useState("Developer tools dashboard for modern software engineers");

@@ -34,15 +34,13 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
-      setSelectedIndex(0);
-    } else {
-      setQuery("");
     }
   }, [isOpen]);
 
-  useEffect(() => {
+  const handleQueryChange = (val: string) => {
+    setQuery(val);
     setSelectedIndex(0);
-  }, [query]);
+  };
 
   const handleSelect = (tool: ToolMeta) => {
     addRecent(tool.id);
@@ -82,14 +80,14 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
             ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => handleQueryChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search developer tools (e.g. JWT, JSON, Regex, Base64)..."
             className="w-full bg-transparent text-zinc-100 placeholder-zinc-500 text-sm focus:outline-none"
           />
           {query && (
             <button
-              onClick={() => setQuery("")}
+              onClick={() => handleQueryChange("")}
               className="text-zinc-500 hover:text-zinc-300 p-1 mr-1"
             >
               <X className="w-4 h-4" />

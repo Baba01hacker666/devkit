@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { Palette, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Palette, AlertTriangle } from "lucide-react";
 
 export function ColorConverterTool() {
   const [colorInput, setColorInput] = useState("#3b82f6");

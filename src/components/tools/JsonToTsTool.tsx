@@ -33,22 +33,24 @@ export function JsonToTsTool() {
   const [rootName, setRootName] = useState("Root");
   const [useType, setUseType] = useState(false);
   const [useExport, setUseExport] = useState(true);
-  const [parseError, setParseError] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const tsOutput = useMemo(() => {
+  const { tsOutput, parseError } = useMemo(() => {
     if (!jsonInput.trim()) {
-      setParseError(null);
-      return "";
+      return { tsOutput: "", parseError: null };
     }
 
     try {
       const parsed = JSON.parse(jsonInput);
-      setParseError(null);
-      return generateTs(parsed, rootName, { useType, useExport });
+      return {
+        tsOutput: generateTs(parsed, rootName, { useType, useExport }),
+        parseError: null,
+      };
     } catch (err: unknown) {
-      setParseError(err instanceof Error ? err.message : "Invalid JSON syntax");
-      return "";
+      return {
+        tsOutput: "",
+        parseError: err instanceof Error ? err.message : "Invalid JSON syntax",
+      };
     }
   }, [jsonInput, rootName, useType, useExport]);
 
