@@ -1,16 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useMounted } from "./use-mounted";
 
 const RECENT_KEY = "devkit_recent_tools";
 const MAX_RECENT = 10;
 
 export function useRecent() {
+  const mounted = useMounted();
   const [recent, setRecent] = useState<string[]>([]);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     try {
       const stored = localStorage.getItem(RECENT_KEY);
       if (stored) {

@@ -1,22 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useMounted } from "./use-mounted";
 
 const FAVORITES_KEY = "devkit_favorites";
+const DEFAULT_FAVORITES = ["json-formatter", "jwt-decoder", "hash-generator", "uuid-generator"];
 
 export function useFavorites() {
-  const [favorites, setFavorites] = useState<string[]>([]);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
+  const [favorites, setFavorites] = useState<string[]>(DEFAULT_FAVORITES);
 
   useEffect(() => {
-    setMounted(true);
     try {
       const stored = localStorage.getItem(FAVORITES_KEY);
       if (stored) {
         setFavorites(JSON.parse(stored));
-      } else {
-        // Default favorites
-        setFavorites(["json-formatter", "jwt-decoder", "hash-generator", "uuid-generator"]);
       }
     } catch {
       // Ignore localStorage errors
