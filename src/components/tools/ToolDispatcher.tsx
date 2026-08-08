@@ -15,6 +15,12 @@ import { HttpHeaderAnalyzerTool } from "./HttpHeaderAnalyzerTool";
 import { TextDiffTool } from "./TextDiffTool";
 import { CaseConverterTool } from "./CaseConverterTool";
 import { CronHelperTool } from "./CronHelperTool";
+import { ColorConverterTool } from "./ColorConverterTool";
+import { NumberBaseConverterTool } from "./NumberBaseConverterTool";
+import { RandomDataTool } from "./RandomDataTool";
+import { MarkdownPreviewTool } from "./MarkdownPreviewTool";
+import { HtmlEntitiesTool } from "./HtmlEntitiesTool";
+import { WhitespaceCleanerTool } from "./WhitespaceCleanerTool";
 import { ShieldCheck, Info } from "lucide-react";
 
 interface ToolDispatcherProps {
@@ -63,6 +69,20 @@ export function ToolDispatcher({ slug }: ToolDispatcherProps) {
       case "cron":
       case "cron-helper":
         return <CronHelperTool />;
+      case "color":
+      case "color-converter":
+        return <ColorConverterTool />;
+      case "base-converter":
+      case "number-base-converter":
+        return <NumberBaseConverterTool />;
+      case "random-data":
+        return <RandomDataTool />;
+      case "markdown":
+        return <MarkdownPreviewTool />;
+      case "html-entities":
+        return <HtmlEntitiesTool />;
+      case "whitespace":
+        return <WhitespaceCleanerTool />;
       default:
         notFound();
     }

@@ -11,7 +11,7 @@ DevKit brings essential, high-performance developer utilities into a single, uni
 
 ---
 
-## 🚀 Built-In Developer Tools (14 Tools)
+## 🚀 Built-In Developer Tools (20 Tools)
 
 ### 📄 JSON Category
 - **JSON Formatter & Validator** (`/dev/json`): Format, minify, and validate JSON payloads with precise line & column syntax error detection, file upload/download, and configurable indentations.
@@ -26,7 +26,9 @@ DevKit brings essential, high-performance developer utilities into a single, uni
 ### 🔤 Text Category
 - **Regex Tester & Playground** (`/dev/regex`): Live pattern matching, match highlighting, capture groups breakdown, replace preview, common regex templates, and syntax explanation.
 - **Text Diff Comparator** (`/dev/text-diff`): Side-by-side text diff engine with visual addition (+) and deletion (-) line metrics.
-- **Text Case Converter** (`/dev/case-converter`): Convert text between camelCase, PascalCase, snake_case, kebab-case, CONSTANT_CASE, Title Case, etc., with character/word metrics.
+- **Text Case Converter** (`/dev/case-converter`): Convert text between camelCase, PascalCase, snake_case, kebab-case, CONSTANT_CASE, Title Case, etc.
+- **Markdown Live Previewer** (`/dev/markdown`): Live Markdown editor with split-screen rendered HTML preview & HTML markup converter.
+- **Whitespace Cleaner** (`/dev/whitespace`): Strip trailing spaces, remove duplicate empty lines, convert tabs to spaces, and clean formatting.
 
 ### ⏱️ Time Category
 - **Unix Timestamp Converter** (`/dev/timestamp`): Convert Epoch timestamps (seconds/ms) to UTC, Local Date, ISO 8601, and relative times ("in 5 minutes", "2 hours ago"), plus live clock.
@@ -36,12 +38,16 @@ DevKit brings essential, high-performance developer utilities into a single, uni
 - **Base64 Encoder / Decoder** (`/dev/base64`): Convert text & files to standard or URL-safe Base64 with full UTF-8 Unicode support.
 - **URL Encoder / Decoder** (`/dev/url`): Encode/decode URI components and automatically parse query strings into key-value tables with 1-click copy buttons.
 - **UUID / GUID v4 Generator** (`/dev/uuid`): Generate cryptographically secure UUID v4 tokens in bulk (1–500) with custom hyphens, uppercase, or brace formatting.
+- **Color Converter & Accessibility Checker** (`/dev/color`): Convert HEX, RGB, HSL, RGBA color codes with live WCAG AA/AAA contrast testing.
+- **Number Base Converter** (`/dev/base-converter`): Convert numbers between Binary, Octal, Decimal, and Hexadecimal with bit-grid visualization.
+- **Random Data / Mock Generator** (`/dev/random-data`): Generate mock dataset records (Users, Emails, UUIDs, IPs) in JSON, CSV, or SQL Insert format.
+- **HTML Entity Converter** (`/dev/html-entities`): Escape raw HTML characters into HTML entities or decode entity strings back into HTML.
 
 ---
 
 ## 🎨 Features & UX Highlights
 
-- **Command Palette (`Ctrl/Cmd + K`)**: Instant search across all tools, descriptions, categories, and keywords with full keyboard navigation (`↑`, `↓`, `Enter`, `ESC`).
+- **Command Palette (`Ctrl/Cmd + K`)**: Instant search across all 20 tools, descriptions, categories, and keywords with full keyboard navigation (`↑`, `↓`, `Enter`, `ESC`).
 - **Favorites & Pinned Tools**: Pin your most frequently used tools to your sidebar & dashboard homepage (`localStorage` backed).
 - **Recently Used Tools**: Automatically tracks your recently accessed tools (`localStorage` backed).
 - **Monaco Code Editor**: Powered by VS Code's editor engine with dynamic loading for maximum performance.
