@@ -1,43 +1,47 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState } from "react";
 import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { useToast } from "@/components/ui/Toast";
 import { RefreshCw, Download, Fingerprint } from "lucide-react";
+
+function createUuids(
+  count: number,
+  useHyphens: boolean,
+  useUppercase: boolean,
+  useBraces: boolean
+): string[] {
+  const list: string[] = [];
+  const limit = Math.min(Math.max(1, count), 500);
+
+  for (let i = 0; i < limit; i++) {
+    let raw = crypto.randomUUID();
+    if (!useHyphens) {
+      raw = raw.replace(/-/g, "");
+    }
+    if (useUppercase) {
+      raw = raw.toUpperCase();
+    }
+    if (useBraces) {
+      raw = `{${raw}}`;
+    }
+    list.push(raw);
+  }
+  return list;
+}
 
 export function UuidGeneratorTool() {
   const [quantity, setQuantity] = useState(5);
   const [useHyphens, setUseHyphens] = useState(true);
   const [useUppercase, setUseUppercase] = useState(false);
   const [useBraces, setUseBraces] = useState(false);
-  const [uuids, setUuids] = useState<string[]>([]);
+  const [uuids, setUuids] = useState<string[]>(() => createUuids(5, true, false, false));
   const { toast } = useToast();
 
-  const generateUuids = useCallback(() => {
-    const list: string[] = [];
-    const count = Math.min(Math.max(1, quantity), 500);
-
-    for (let i = 0; i < count; i++) {
-      let raw = crypto.randomUUID();
-      if (!useHyphens) {
-        raw = raw.replace(/-/g, "");
-      }
-      if (useUppercase) {
-        raw = raw.toUpperCase();
-      }
-      if (useBraces) {
-        raw = `{${raw}}`;
-      }
-      list.push(raw);
-    }
-
-    setUuids(list);
-  }, [quantity, useHyphens, useUppercase, useBraces]);
-
-  useEffect(() => {
-    generateUuids();
-  }, [generateUuids]);
+  const handleGenerate = () => {
+    setUuids(createUuids(quantity, useHyphens, useUppercase, useBraces));
+  };
 
   const handleDownloadTxt = () => {
     if (uuids.length === 0) return;
@@ -120,7 +124,7 @@ export function UuidGeneratorTool() {
 
         <div className="flex items-center gap-2">
           <button
-            onClick={generateUuids}
+            onClick={handleGenerate}
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow transition"
           >
             <RefreshCw className="w-3.5 h-3.5" />

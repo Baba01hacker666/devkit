@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMounted } from "./use-mounted";
 
 const RECENT_KEY = "devkit_recent_tools";
@@ -8,18 +8,17 @@ const MAX_RECENT = 10;
 
 export function useRecent() {
   const mounted = useMounted();
-  const [recent, setRecent] = useState<string[]>([]);
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(RECENT_KEY);
-      if (stored) {
-        setRecent(JSON.parse(stored));
+  const [recent, setRecent] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(RECENT_KEY);
+        if (stored) return JSON.parse(stored);
+      } catch {
+        // Ignore
       }
-    } catch {
-      // Ignore
     }
-  }, []);
+    return [];
+  });
 
   const addRecent = (toolId: string) => {
     setRecent((prev) => {

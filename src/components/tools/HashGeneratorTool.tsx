@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useTransition } from "react";
 import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { ShieldCheck, Trash2, Key } from "lucide-react";
@@ -22,51 +22,46 @@ export function HashGeneratorTool() {
     "SHA-512": "",
   });
 
-  useEffect(() => {
-    async function computeHashes() {
-      if (!input) {
-        setHashes({
-          "SHA-1": "",
-          "SHA-256": "",
-          "SHA-384": "",
-          "SHA-512": "",
-        });
-        return;
-      }
+  const [, startTransition] = useTransition();
 
-      const encoder = new TextEncoder();
-      const data = encoder.encode(input);
-
-      const algos = [
-        { name: "SHA-1", webAlg: "SHA-1" },
-        { name: "SHA-256", webAlg: "SHA-256" },
-        { name: "SHA-384", webAlg: "SHA-384" },
-        { name: "SHA-512", webAlg: "SHA-512" },
-      ];
-
-      const res: Partial<HashesState> = {};
-
-      for (const algo of algos) {
-        try {
-          const buffer = await crypto.subtle.digest(algo.webAlg, data);
-          const hashArray = Array.from(new Uint8Array(buffer));
-          let hashHex = hashArray
-            .map((b) => b.toString(16).padStart(2, "0"))
-            .join("");
-          if (isUppercase) {
-            hashHex = hashHex.toUpperCase();
-          }
-          res[algo.name as keyof HashesState] = hashHex;
-        } catch {
-          res[algo.name as keyof HashesState] = "Error computing hash";
-        }
-      }
-
-      setHashes(res as HashesState);
+  const handleInputChange = (val: string) => {
+    setInput(val);
+    if (!val) {
+      setHashes({ "SHA-1": "", "SHA-256": "", "SHA-384": "", "SHA-512": "" });
+      return;
     }
+    computeAllHashes(val, isUppercase);
+  };
 
-    computeHashes();
-  }, [input, isUppercase]);
+  const handleUppercaseToggle = (upper: boolean) => {
+    setIsUppercase(upper);
+    computeAllHashes(input, upper);
+  };
+
+  const computeAllHashes = (text: string, upper: boolean) => {
+    startTransition(() => {
+      async function run() {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(text);
+        const algos = ["SHA-1", "SHA-256", "SHA-384", "SHA-512"] as const;
+        const res: Partial<HashesState> = {};
+
+        for (const algo of algos) {
+          try {
+            const buffer = await crypto.subtle.digest(algo, data);
+            const hashArray = Array.from(new Uint8Array(buffer));
+            let hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+            if (upper) hashHex = hashHex.toUpperCase();
+            res[algo] = hashHex;
+          } catch {
+            res[algo] = "Error computing hash";
+          }
+        }
+        setHashes(res as HashesState);
+      }
+      run();
+    });
+  };
 
   return (
     <div>
@@ -90,14 +85,14 @@ export function HashGeneratorTool() {
             <input
               type="checkbox"
               checked={isUppercase}
-              onChange={(e) => setIsUppercase(e.target.checked)}
+              onChange={(e) => handleUppercaseToggle(e.target.checked)}
               className="rounded bg-zinc-950 border-zinc-700 text-blue-600 focus:ring-0"
             />
             <span>UPPERCASE Hashes</span>
           </label>
 
           <button
-            onClick={() => setInput("")}
+            onClick={() => handleInputChange("")}
             className="p-2 bg-zinc-800 hover:bg-rose-950/40 text-zinc-400 hover:text-rose-400 rounded-lg transition"
             title="Clear text"
           >
@@ -111,7 +106,7 @@ export function HashGeneratorTool() {
         <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Input Text</label>
         <textarea
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => handleInputChange(e.target.value)}
           placeholder="Enter text to generate hashes..."
           className="w-full h-32 font-mono text-xs bg-zinc-950 text-zinc-100 p-3.5 rounded-xl border border-zinc-800 focus:outline-none focus:border-blue-500/50 resize-y"
         />

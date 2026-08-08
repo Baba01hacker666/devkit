@@ -1,21 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMounted } from "./use-mounted";
 
 export type Theme = "dark" | "light";
 
 export function useTheme() {
   const mounted = useMounted();
-  const [theme, setTheme] = useState<Theme>("dark");
-
-  useEffect(() => {
-    const saved = localStorage.getItem("devkit_theme") as Theme | null;
-    if (saved) {
-      setTheme(saved);
-      document.documentElement.classList.toggle("light", saved === "light");
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("devkit_theme") as Theme | null;
+      if (saved) {
+        document.documentElement.classList.toggle("light", saved === "light");
+        return saved;
+      }
     }
-  }, []);
+    return "dark";
+  });
 
   const toggleTheme = () => {
     const next = theme === "dark" ? "light" : "dark";

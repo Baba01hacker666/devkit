@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMounted } from "./use-mounted";
 
 const FAVORITES_KEY = "devkit_favorites";
@@ -8,18 +8,17 @@ const DEFAULT_FAVORITES = ["json-formatter", "jwt-decoder", "hash-generator", "u
 
 export function useFavorites() {
   const mounted = useMounted();
-  const [favorites, setFavorites] = useState<string[]>(DEFAULT_FAVORITES);
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(FAVORITES_KEY);
-      if (stored) {
-        setFavorites(JSON.parse(stored));
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(FAVORITES_KEY);
+        if (stored) return JSON.parse(stored);
+      } catch {
+        // Ignore
       }
-    } catch {
-      // Ignore localStorage errors
     }
-  }, []);
+    return DEFAULT_FAVORITES;
+  });
 
   const toggleFavorite = (toolId: string) => {
     setFavorites((prev) => {
