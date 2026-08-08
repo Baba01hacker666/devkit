@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { useToast } from "@/components/ui/Toast";
-import { Trash2, AlertCircle, Link2, Copy } from "lucide-react";
+import { Trash2, AlertCircle, Link2 } from "lucide-react";
 
 const SAMPLE_URL =
   "https://devkit.io/search?q=developer+tools&category=security&ref=github#section";

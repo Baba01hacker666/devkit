@@ -5,7 +5,7 @@ import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Editor } from "@/components/ui/Editor";
 import { useToast } from "@/components/ui/Toast";
-import { RefreshCw, Download, Database } from "lucide-react";
+import { RefreshCw, Download } from "lucide-react";
 
 const FIRST_NAMES = ["Alex", "Jordan", "Taylor", "Morgan", "Sam", "Chris", "Casey", "Riley", "Jamie", "Dakota"];
 const LAST_NAMES = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"];

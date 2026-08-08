@@ -6,12 +6,12 @@ import { CopyButton } from "@/components/ui/CopyButton";
 import { Clock, Play, Pause, Calendar, RefreshCw } from "lucide-react";
 
 export function TimestampConverterTool() {
-  const [nowSec, setNowSec] = useState<number>(Math.floor(Date.now() / 1000));
+  const [nowSec, setNowSec] = useState<number>(() => Math.floor(Date.now() / 1000));
   const [isTicking, setIsTicking] = useState(true);
-  const [timestampInput, setTimestampInput] = useState<string>(
+  const [timestampInput, setTimestampInput] = useState<string>(() =>
     Math.floor(Date.now() / 1000).toString()
   );
-  const [dateInput, setDateInput] = useState<string>(
+  const [dateInput, setDateInput] = useState<string>(() =>
     new Date().toISOString().slice(0, 16)
   );
 
@@ -42,8 +42,8 @@ export function TimestampConverterTool() {
     const utc = dateObj.toUTCString();
     const local = dateObj.toLocaleString();
 
-    return { sec, ms, iso, utc, local, relative: getRelativeTime(sec) };
-  }, [timestampInput]);
+    return { sec, ms, iso, utc, local, relative: getRelativeTime(sec, nowSec) };
+  }, [timestampInput, nowSec]);
 
   // Convert input date to timestamp details
   const parsedFromDate = useMemo(() => {
@@ -57,8 +57,8 @@ export function TimestampConverterTool() {
     const utc = dateObj.toUTCString();
     const local = dateObj.toLocaleString();
 
-    return { sec, ms, iso, utc, local, relative: getRelativeTime(sec) };
-  }, [dateInput]);
+    return { sec, ms, iso, utc, local, relative: getRelativeTime(sec, nowSec) };
+  }, [dateInput, nowSec]);
 
   const handleSetCurrent = () => {
     const s = Math.floor(Date.now() / 1000).toString();
@@ -188,9 +188,8 @@ function ResultRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function getRelativeTime(timestampSec: number): string {
-  const now = Math.floor(Date.now() / 1000);
-  const diff = timestampSec - now;
+function getRelativeTime(timestampSec: number, nowSec: number): string {
+  const diff = timestampSec - nowSec;
   const abs = Math.abs(diff);
 
   const m = Math.floor(abs / 60);

@@ -5,7 +5,6 @@ import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Editor } from "@/components/ui/Editor";
 import { useToast } from "@/components/ui/Toast";
-import { Download, FileText, Code } from "lucide-react";
 
 const SAMPLE_MARKDOWN = `# DevKit Markdown Previewer
 
@@ -138,7 +137,7 @@ export function MarkdownPreviewTool() {
 
 /** Basic Markdown parser for headings, bold, italic, code, quotes, lists */
 function parseMarkdownToHtml(md: string): string {
-  let html = md
+  const html = md
     .replace(/^### (.*$)/gim, '<h3 className="text-lg font-bold text-blue-400 mt-3 mb-1">$1</h3>')
     .replace(/^## (.*$)/gim, '<h2 className="text-xl font-bold text-zinc-100 mt-4 mb-2 border-b border-zinc-800 pb-1">$1</h2>')
     .replace(/^# (.*$)/gim, '<h1 className="text-2xl font-extrabold text-zinc-100 mt-2 mb-3">$1</h1>')

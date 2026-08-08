@@ -19,6 +19,7 @@ interface ParsedJwt {
 
 export function JwtDecoderTool() {
   const [jwtToken, setJwtToken] = useState(SAMPLE_JWT);
+  const [currentNowSec] = useState(() => Math.floor(Date.now() / 1000));
 
   const parsedJwt = useMemo<ParsedJwt>(() => {
     if (!jwtToken.trim()) {
@@ -67,18 +68,16 @@ export function JwtDecoderTool() {
     let formattedExp = "";
     let formattedIat = "";
 
-    const nowSec = Math.floor(Date.now() / 1000);
-
     if (typeof exp === "number") {
       const expDate = new Date(exp * 1000);
       formattedExp = expDate.toUTCString() + ` (${expDate.toLocaleString()})`;
-      if (exp < nowSec) {
+      if (exp < currentNowSec) {
         isExpired = true;
-        const agoSec = nowSec - exp;
+        const agoSec = currentNowSec - exp;
         timeRemaining = `Expired ${formatDuration(agoSec)} ago`;
       } else {
         isExpired = false;
-        const diffSec = exp - nowSec;
+        const diffSec = exp - currentNowSec;
         timeRemaining = `Expires in ${formatDuration(diffSec)}`;
       }
     }
@@ -89,7 +88,7 @@ export function JwtDecoderTool() {
     }
 
     return { exp, iat, nbf, isExpired, timeRemaining, formattedExp, formattedIat };
-  }, [parsedJwt]);
+  }, [parsedJwt, currentNowSec]);
 
   return (
     <div>

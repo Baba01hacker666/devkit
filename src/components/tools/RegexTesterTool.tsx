@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { Regex, Sparkles, CheckCircle2, AlertTriangle, Lightbulb } from "lucide-react";
+import { Sparkles, AlertTriangle } from "lucide-react";
 
 interface RegexExample {
   title: string;
@@ -58,9 +58,9 @@ export function RegexTesterTool() {
       .join("");
   }, [flags]);
 
-  const { matches, error, replacedResult, regexObj } = useMemo(() => {
+  const { matches, error, replacedResult } = useMemo(() => {
     if (!pattern) {
-      return { matches: [], error: null, replacedResult: testText, regexObj: null };
+      return { matches: [], error: null, replacedResult: testText };
     }
 
     try {
@@ -98,14 +98,12 @@ export function RegexTesterTool() {
         matches: matchResults,
         error: null,
         replacedResult: replaced,
-        regexObj: reg,
       };
     } catch (err: unknown) {
       return {
         matches: [],
         error: err instanceof Error ? err.message : "Invalid regular expression pattern",
         replacedResult: "",
-        regexObj: null,
       };
     }
   }, [pattern, flagStr, testText, replaceText]);

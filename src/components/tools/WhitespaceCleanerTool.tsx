@@ -3,8 +3,7 @@
 import { useState, useMemo } from "react";
 import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { useToast } from "@/components/ui/Toast";
-import { Trash2, Sparkles } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 const SAMPLE_TEXT = `   function example() {   
 \tconst a = 1;   
@@ -20,7 +19,6 @@ export function WhitespaceCleanerTool() {
   const [trimLines, setTrimLines] = useState(true);
   const [removeEmptyLines, setRemoveEmptyLines] = useState(true);
   const [tabSpaces, setTabSpaces] = useState<number>(2);
-  const { toast } = useToast();
 
   const cleanedOutput = useMemo(() => {
     if (!input) return "";
