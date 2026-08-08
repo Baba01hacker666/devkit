@@ -5,10 +5,22 @@ import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Binary, AlertTriangle } from "lucide-react";
 
+type BaseResult =
+  | { valid: false; error: string }
+  | {
+      valid: true;
+      dec: string;
+      bin: string;
+      binPadded: string;
+      oct: string;
+      hex: string;
+      byteCount: number;
+    };
+
 export function NumberBaseConverterTool() {
   const [decInput, setDecInput] = useState("255");
 
-  const parsed = useMemo(() => {
+  const parsed = useMemo<BaseResult | null>(() => {
     if (!decInput.trim()) return null;
     const num = Number(decInput.trim());
     if (isNaN(num)) return { valid: false, error: "Invalid decimal number" };

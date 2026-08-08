@@ -15,7 +15,7 @@ export function ToolCard({ tool }: ToolCardProps) {
   const fav = isFavorite(tool.id);
 
   // Dynamic Lucide Icon fallback
-  const IconComponent = (Icons as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
+  const IconComponent = (Icons as unknown as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
 
   return (
     <div className="group relative bg-zinc-900/60 hover:bg-zinc-800/80 border border-zinc-800/80 hover:border-zinc-700/80 rounded-xl p-5 transition-all duration-200 shadow-sm hover:shadow-md flex flex-col justify-between">

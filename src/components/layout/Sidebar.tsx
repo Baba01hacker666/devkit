@@ -68,7 +68,7 @@ export function Sidebar({ isMobileOpen, onCloseMobile }: SidebarProps) {
             </div>
             <div className="mt-1 space-y-0.5">
               {favoriteTools.map((tool) => {
-                const IconComp = (Icons as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
+                const IconComp = (Icons as unknown as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
                 const active = pathname === tool.route;
                 return (
                   <Link
@@ -100,7 +100,7 @@ export function Sidebar({ isMobileOpen, onCloseMobile }: SidebarProps) {
             <div className="mt-1 space-y-0.5">
               {recentTools.slice(0, 5).map((tool) => {
                 if (!tool) return null;
-                const IconComp = (Icons as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
+                const IconComp = (Icons as unknown as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
                 const active = pathname === tool.route;
                 return (
                   <Link
@@ -156,7 +156,7 @@ export function Sidebar({ isMobileOpen, onCloseMobile }: SidebarProps) {
                   {isExpanded && (
                     <div className="space-y-0.5 pl-2">
                       {catTools.map((tool) => {
-                        const IconComp = (Icons as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
+                        const IconComp = (Icons as unknown as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
                         const active = pathname === tool.route;
 
                         return (

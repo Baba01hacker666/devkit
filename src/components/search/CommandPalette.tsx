@@ -107,7 +107,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
           ) : (
             filteredTools.map((tool, idx) => {
               const IconComp =
-                (Icons as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
+                (Icons as unknown as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
               const isSelected = idx === selectedIndex;
 
               return (

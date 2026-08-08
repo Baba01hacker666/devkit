@@ -5,10 +5,28 @@ import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Palette, AlertTriangle } from "lucide-react";
 
+type ColorResult =
+  | { valid: false; error: string }
+  | {
+      valid: true;
+      hex: string;
+      rgb: string;
+      rgba: string;
+      hsl: string;
+      hsla: string;
+      luminance: string;
+      contrastWhite: number;
+      contrastBlack: number;
+      r: number;
+      g: number;
+      b: number;
+      a: number;
+    };
+
 export function ColorConverterTool() {
   const [colorInput, setColorInput] = useState("#3b82f6");
 
-  const parsed = useMemo(() => {
+  const parsed = useMemo<ColorResult>(() => {
     let hex = colorInput.trim();
     if (!hex.startsWith("#")) hex = "#" + hex;
 
