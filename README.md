@@ -11,7 +11,7 @@ DevKit brings essential, high-performance developer utilities into a single, uni
 
 ---
 
-## 🚀 Built-In Developer Tools (20 Tools)
+## 🚀 Built-In Developer Tools (26 Tools)
 
 ### 📄 JSON Category
 - **JSON Formatter & Validator** (`/dev/json`): Format, minify, and validate JSON payloads with precise line & column syntax error detection, file upload/download, and configurable indentations.
@@ -22,6 +22,7 @@ DevKit brings essential, high-performance developer utilities into a single, uni
 - **JWT Decoder** (`/dev/jwt`): Decode JSON Web Tokens (Header, Payload, Claims, Expiration countdown) 100% locally in your browser.
 - **Cryptographic Hash Generator** (`/dev/hash`): Compute SHA-1, SHA-256, SHA-384, and SHA-512 digests simultaneously using browser Web Crypto APIs.
 - **HTTP Header Security Analyzer** (`/dev/headers`): Inspect response headers for security best practices (CSP, HSTS, XFO, CORS, Cookies, Server disclosure) with overall Security Rating (Grade A+, B, C, F).
+- **Password Generator** (`/dev/password-generator`): Generate cryptographically secure random passwords with custom length, character sets, and ambiguous-character exclusion.
 
 ### 🔤 Text Category
 - **Regex Tester & Playground** (`/dev/regex`): Live pattern matching, match highlighting, capture groups breakdown, replace preview, common regex templates, and syntax explanation.
@@ -29,6 +30,8 @@ DevKit brings essential, high-performance developer utilities into a single, uni
 - **Text Case Converter** (`/dev/case-converter`): Convert text between camelCase, PascalCase, snake_case, kebab-case, CONSTANT_CASE, Title Case, etc.
 - **Markdown Live Previewer** (`/dev/markdown`): Live Markdown editor with split-screen rendered HTML preview & HTML markup converter.
 - **Whitespace Cleaner** (`/dev/whitespace`): Strip trailing spaces, remove duplicate empty lines, convert tabs to spaces, and clean formatting.
+- **Lorem Ipsum Generator** (`/dev/lorem-ipsum`): Generate lorem ipsum placeholder text in words, sentences, or paragraphs with optional HTML markup.
+- **Text Statistics** (`/dev/text-stats`): Analyze word count, characters, sentences, paragraphs, reading time, and top keyword frequency.
 
 ### ⏱️ Time Category
 - **Unix Timestamp Converter** (`/dev/timestamp`): Convert Epoch timestamps (seconds/ms) to UTC, Local Date, ISO 8601, and relative times ("in 5 minutes", "2 hours ago"), plus live clock.
@@ -42,12 +45,15 @@ DevKit brings essential, high-performance developer utilities into a single, uni
 - **Number Base Converter** (`/dev/base-converter`): Convert numbers between Binary, Octal, Decimal, and Hexadecimal with bit-grid visualization.
 - **Random Data / Mock Generator** (`/dev/random-data`): Generate mock dataset records (Users, Emails, UUIDs, IPs) in JSON, CSV, or SQL Insert format.
 - **HTML Entity Converter** (`/dev/html-entities`): Escape raw HTML characters into HTML entities or decode entity strings back into HTML.
+- **CSV ↔ JSON Converter** (`/dev/csv-json`): Convert CSV to JSON and back with custom delimiters, quoted fields, and header rows.
+- **Subnet (CIDR) Calculator** (`/dev/subnet-calculator`): Compute network, broadcast, usable hosts, wildcard mask, and ranges for any IPv4 CIDR block.
+- **HTTP Status Codes Reference** (`/dev/http-status`): Browse every standard HTTP status code by class with descriptions.
 
 ---
 
 ## 🎨 Features & UX Highlights
 
-- **Command Palette (`Ctrl/Cmd + K`)**: Instant search across all 20 tools, descriptions, categories, and keywords with full keyboard navigation (`↑`, `↓`, `Enter`, `ESC`).
+- **Command Palette (`Ctrl/Cmd + K`)**: Instant search across all 26 tools, descriptions, categories, and keywords with full keyboard navigation (`↑`, `↓`, `Enter`, `ESC`).
 - **Favorites & Pinned Tools**: Pin your most frequently used tools to your sidebar & dashboard homepage (`localStorage` backed).
 - **Recently Used Tools**: Automatically tracks your recently accessed tools (`localStorage` backed).
 - **Monaco Code Editor**: Powered by VS Code's editor engine with dynamic loading for maximum performance.

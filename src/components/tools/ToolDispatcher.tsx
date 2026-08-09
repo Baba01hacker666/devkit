@@ -21,6 +21,12 @@ import { RandomDataTool } from "./RandomDataTool";
 import { MarkdownPreviewTool } from "./MarkdownPreviewTool";
 import { HtmlEntitiesTool } from "./HtmlEntitiesTool";
 import { WhitespaceCleanerTool } from "./WhitespaceCleanerTool";
+import { PasswordGeneratorTool } from "./PasswordGeneratorTool";
+import { LoremIpsumTool } from "./LoremIpsumTool";
+import { TextStatsTool } from "./TextStatsTool";
+import { SubnetCalculatorTool } from "./SubnetCalculatorTool";
+import { CsvToJsonTool } from "./CsvToJsonTool";
+import { HttpStatusTool } from "./HttpStatusTool";
 import { ShieldCheck, Info } from "lucide-react";
 
 interface ToolDispatcherProps {
@@ -83,6 +89,18 @@ export function ToolDispatcher({ slug }: ToolDispatcherProps) {
         return <HtmlEntitiesTool />;
       case "whitespace":
         return <WhitespaceCleanerTool />;
+      case "password-generator":
+        return <PasswordGeneratorTool />;
+      case "lorem-ipsum":
+        return <LoremIpsumTool />;
+      case "text-stats":
+        return <TextStatsTool />;
+      case "subnet-calculator":
+        return <SubnetCalculatorTool />;
+      case "csv-json":
+        return <CsvToJsonTool />;
+      case "http-status":
+        return <HttpStatusTool />;
       default:
         notFound();
     }
