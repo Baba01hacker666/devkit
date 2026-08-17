@@ -163,6 +163,12 @@ export function QrCodeTool() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const qrContainerRef = useRef<HTMLDivElement | null>(null);
 
+  // Effective ECC (Automatically upgraded to H if a logo is present to maintain scan reliability)
+  const effectiveEcc: ErrorCorrectionLevel =
+    (selectedPresetLogo !== "none" || customLogoUrl) && (ecc === "L" || ecc === "M")
+      ? "H"
+      : ecc;
+
   // Compute final encoded payload string based on current mode
   const encodedPayload = useMemo(() => {
     switch (contentType) {
@@ -256,13 +262,6 @@ export function QrCodeTool() {
     geoQuery,
   ]);
 
-  // Adjust ECC automatically if logo is added
-  useEffect(() => {
-    if ((selectedPresetLogo !== "none" || customLogoUrl) && (ecc === "L" || ecc === "M")) {
-      setEcc("H");
-    }
-  }, [selectedPresetLogo, customLogoUrl, ecc]);
-
   // Draw QR code onto canvas
   const renderQrToCanvas = useCallback(
     async (targetCanvas: HTMLCanvasElement, renderWidth: number = 800) => {
@@ -272,7 +271,7 @@ export function QrCodeTool() {
 
       try {
         const qrData = QRCode.create(encodedPayload, {
-          errorCorrectionLevel: ecc,
+          errorCorrectionLevel: effectiveEcc,
         });
 
         const matrixSize = qrData.modules.size;
@@ -503,7 +502,7 @@ export function QrCodeTool() {
     },
     [
       encodedPayload,
-      ecc,
+      effectiveEcc,
       margin,
       transparentBg,
       bgColor,
@@ -621,7 +620,7 @@ export function QrCodeTool() {
       const svgString = await QRCode.toString(encodedPayload, {
         type: "svg",
         margin: margin,
-        errorCorrectionLevel: ecc,
+        errorCorrectionLevel: effectiveEcc,
         color: {
           dark: fgColor,
           light: transparentBg ? "#00000000" : bgColor,
@@ -922,6 +921,16 @@ export function QrCodeTool() {
                     />
                   </div>
                 </div>
+                <div>
+                  <label className="block text-xs text-zinc-400 mb-1">Website URL</label>
+                  <input
+                    type="text"
+                    value={vcardUrl}
+                    onChange={(e) => setVcardUrl(e.target.value)}
+                    placeholder="https://example.com"
+                    className="w-full bg-zinc-950 text-zinc-100 px-3 py-2 rounded-lg border border-zinc-800 text-xs font-mono focus:outline-none focus:border-blue-500"
+                  />
+                </div>
               </div>
             )}
 
@@ -1031,6 +1040,16 @@ export function QrCodeTool() {
                     className="w-full bg-zinc-950 text-zinc-100 px-3 py-2 rounded-lg border border-zinc-800 text-xs font-mono focus:outline-none focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label className="block text-xs text-zinc-400 mb-1">Payment Memo / Label</label>
+                  <input
+                    type="text"
+                    value={cryptoLabel}
+                    onChange={(e) => setCryptoLabel(e.target.value)}
+                    placeholder="e.g. Invoice #1024"
+                    className="w-full bg-zinc-950 text-zinc-100 px-3 py-2 rounded-lg border border-zinc-800 text-xs font-mono focus:outline-none focus:border-blue-500"
+                  />
+                </div>
               </div>
             )}
 
@@ -1076,6 +1095,16 @@ export function QrCodeTool() {
                       className="w-full bg-zinc-950 text-zinc-100 px-3 py-2 rounded-lg border border-zinc-800 text-xs focus:outline-none focus:border-blue-500"
                     />
                   </div>
+                </div>
+                <div>
+                  <label className="block text-xs text-zinc-400 mb-1">Description / Notes</label>
+                  <textarea
+                    value={eventDesc}
+                    onChange={(e) => setEventDesc(e.target.value)}
+                    rows={2}
+                    placeholder="Event details or agenda..."
+                    className="w-full bg-zinc-950 text-zinc-100 p-3 rounded-lg border border-zinc-800 text-xs font-mono focus:outline-none focus:border-blue-500"
+                  />
                 </div>
               </div>
             )}
@@ -1495,7 +1524,7 @@ export function QrCodeTool() {
                             type="button"
                             onClick={() => setEcc(lvl.id as ErrorCorrectionLevel)}
                             className={`p-2.5 rounded-lg border text-left transition flex flex-col justify-between ${
-                              ecc === lvl.id
+                              effectiveEcc === lvl.id
                                 ? "bg-blue-600/10 border-blue-500 text-blue-400"
                                 : "bg-zinc-950/60 border-zinc-800 text-zinc-400 hover:border-zinc-700"
                             }`}
