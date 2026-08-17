@@ -287,6 +287,16 @@ export const TOOLS: ToolMeta[] = [
     keywords: ["http", "status", "code", "404", "500", "error", "reference", "api"],
     isPopular: false,
   },
+  {
+    id: "qr-code",
+    name: "QR Code Generator",
+    description: "Generate and customize dynamic QR codes for URLs, Wi-Fi, vCards, crypto, and text with vector export",
+    category: "Utilities",
+    iconName: "QrCode",
+    route: "/dev/qr-code",
+    keywords: ["qr", "qrcode", "generator", "wifi", "vcard", "barcode", "scan", "matrix", "vector", "svg"],
+    isPopular: true,
+  },
 ];
 
 export function getToolByRouteOrId(idOrRoute: string): ToolMeta | undefined {

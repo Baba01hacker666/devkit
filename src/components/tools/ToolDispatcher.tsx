@@ -27,6 +27,7 @@ import { TextStatsTool } from "./TextStatsTool";
 import { SubnetCalculatorTool } from "./SubnetCalculatorTool";
 import { CsvToJsonTool } from "./CsvToJsonTool";
 import { HttpStatusTool } from "./HttpStatusTool";
+import { QrCodeTool } from "./QrCodeTool";
 import { ShieldCheck, Info } from "lucide-react";
 
 interface ToolDispatcherProps {
@@ -101,6 +102,10 @@ export function ToolDispatcher({ slug }: ToolDispatcherProps) {
         return <CsvToJsonTool />;
       case "http-status":
         return <HttpStatusTool />;
+      case "qr":
+      case "qr-code":
+      case "qrcode":
+        return <QrCodeTool />;
       default:
         notFound();
     }
