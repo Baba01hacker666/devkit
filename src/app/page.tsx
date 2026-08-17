@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Search, Sparkles, Star, Clock, Flame, ShieldCheck, Command } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 import { TOOLS, CATEGORIES, ToolCategory } from "@/lib/tools-registry";
 import { ToolCard } from "@/components/ui/ToolCard";
 import { useFavorites } from "@/lib/use-favorites";
@@ -39,7 +40,12 @@ export default function HomePage() {
   return (
     <div className="space-y-8 pb-12">
       {/* Header Banner & Global Search */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-zinc-900 via-zinc-900/90 to-zinc-950 border border-zinc-800/80 p-6 sm:p-8 shadow-xl">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-zinc-900 via-zinc-900/90 to-zinc-950 border border-zinc-800/80 p-6 sm:p-8 shadow-xl"
+      >
         <div className="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-medium mb-3">
@@ -68,7 +74,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Favorites Section */}
       {favoriteTools.length > 0 && !searchQuery && (
@@ -124,31 +130,48 @@ export default function HomePage() {
             <h2>All Tools Library</h2>
           </div>
 
-          {/* Category Filter Pills */}
+          {/* Category Filter Pills with Motion layoutId */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
             <button
               onClick={() => setSelectedCategory("All")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition shrink-0 ${
+              className={`relative px-3 py-1.5 rounded-lg text-xs font-medium transition shrink-0 select-none ${
                 selectedCategory === "All"
-                  ? "bg-blue-600 text-white shadow-md"
+                  ? "text-white font-semibold"
                   : "bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800"
               }`}
             >
-              All ({TOOLS.length})
+              {selectedCategory === "All" && (
+                <motion.div
+                  layoutId="categoryBadge"
+                  className="absolute inset-0 bg-blue-600 rounded-lg shadow-sm"
+                  transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                />
+              )}
+              <span className="relative z-10">All ({TOOLS.length})</span>
             </button>
             {CATEGORIES.map((cat: ToolCategory) => {
               const count = TOOLS.filter((t) => t.category === cat).length;
+              const isSelected = selectedCategory === cat;
               return (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition shrink-0 ${
-                    selectedCategory === cat
-                      ? "bg-blue-600 text-white shadow-md"
+                  className={`relative px-3 py-1.5 rounded-lg text-xs font-medium transition shrink-0 select-none ${
+                    isSelected
+                      ? "text-white font-semibold"
                       : "bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800"
                   }`}
                 >
-                  {cat} ({count})
+                  {isSelected && (
+                    <motion.div
+                      layoutId="categoryBadge"
+                      className="absolute inset-0 bg-blue-600 rounded-lg shadow-sm"
+                      transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                    />
+                  )}
+                  <span className="relative z-10">
+                    {cat} ({count})
+                  </span>
                 </button>
               );
             })}
@@ -157,17 +180,35 @@ export default function HomePage() {
 
         {/* Tools Grid */}
         {filteredTools.length === 0 ? (
-          <div className="p-12 text-center border border-dashed border-zinc-800 rounded-xl bg-zinc-900/30">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="p-12 text-center border border-dashed border-zinc-800 rounded-xl bg-zinc-900/30"
+          >
             <Search className="w-8 h-8 text-zinc-600 mx-auto mb-2" />
             <p className="text-zinc-300 font-semibold">No tools found matching your filter</p>
             <p className="text-xs text-zinc-500 mt-1">Try adjusting your search query or category filter.</p>
-          </div>
+          </motion.div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filteredTools.map((tool) => (
-              <ToolCard key={tool.id} tool={tool} />
-            ))}
-          </div>
+          <motion.div
+            layout
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredTools.map((tool) => (
+                <motion.div
+                  key={tool.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <ToolCard tool={tool} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         )}
       </section>
     </div>

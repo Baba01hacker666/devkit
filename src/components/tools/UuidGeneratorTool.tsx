@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { animate } from "animejs";
 import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { useToast } from "@/components/ui/Toast";
@@ -38,9 +40,18 @@ export function UuidGeneratorTool() {
   const [useBraces, setUseBraces] = useState(false);
   const [uuids, setUuids] = useState<string[]>(() => createUuids(5, true, false, false));
   const { toast } = useToast();
+  const listRef = useRef<HTMLDivElement | null>(null);
 
   const handleGenerate = () => {
     setUuids(createUuids(quantity, useHyphens, useUppercase, useBraces));
+    if (listRef.current) {
+      animate(listRef.current, {
+        opacity: [0.4, 1],
+        translateY: [-4, 0],
+        duration: 250,
+        ease: "easeOutQuad",
+      });
+    }
   };
 
   const handleDownloadTxt = () => {
@@ -123,13 +134,15 @@ export function UuidGeneratorTool() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.96 }}
             onClick={handleGenerate}
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow transition"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             <span>Regenerate</span>
-          </button>
+          </motion.button>
 
           <CopyButton
             text={uuids.join("\n")}
@@ -155,19 +168,25 @@ export function UuidGeneratorTool() {
       </div>
 
       {/* Generated list */}
-      <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
-        {uuids.map((id, idx) => (
-          <div
-            key={idx}
-            className="flex items-center justify-between p-3 bg-zinc-900/60 border border-zinc-800 hover:border-zinc-700 rounded-xl transition"
-          >
-            <div className="flex items-center gap-3">
-              <Fingerprint className="w-4 h-4 text-blue-400 shrink-0" />
-              <span className="font-mono text-xs text-zinc-100 select-all">{id}</span>
-            </div>
-            <CopyButton text={id} size="sm" toastMessage="UUID copied!" />
-          </div>
-        ))}
+      <div ref={listRef} className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
+        <AnimatePresence mode="popLayout">
+          {uuids.map((id, idx) => (
+            <motion.div
+              key={`${id}-${idx}`}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              className="flex items-center justify-between p-3 bg-zinc-900/60 border border-zinc-800 hover:border-zinc-700 rounded-xl transition"
+            >
+              <div className="flex items-center gap-3">
+                <Fingerprint className="w-4 h-4 text-blue-400 shrink-0" />
+                <span className="font-mono text-xs text-zinc-100 select-all">{id}</span>
+              </div>
+              <CopyButton text={id} size="sm" toastMessage="UUID copied!" />
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "motion/react";
 import * as Icons from "lucide-react";
 import { Star, ArrowUpRight } from "lucide-react";
 import { ToolMeta } from "@/lib/tools-registry";
@@ -18,13 +19,21 @@ export function ToolCard({ tool }: ToolCardProps) {
   const IconComponent = (Icons as unknown as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
 
   return (
-    <div className="group relative bg-zinc-900/60 hover:bg-zinc-800/80 border border-zinc-800/80 hover:border-zinc-700/80 rounded-xl p-5 transition-all duration-200 shadow-sm hover:shadow-md flex flex-col justify-between">
+    <motion.div
+      whileHover={{ y: -3, transition: { duration: 0.18, ease: "easeOut" } }}
+      whileTap={{ scale: 0.985 }}
+      className="group relative bg-zinc-900/60 hover:bg-zinc-800/80 border border-zinc-800/80 hover:border-zinc-700/80 rounded-xl p-5 transition-colors duration-200 shadow-sm hover:shadow-md flex flex-col justify-between"
+    >
       <div>
         <div className="flex items-center justify-between mb-3">
-          <div className="p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 group-hover:scale-105 transition-transform duration-200">
+          <motion.div
+            whileHover={{ scale: 1.08 }}
+            className="p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 transition-colors duration-200"
+          >
             <IconComponent className="w-5 h-5" />
-          </div>
-          <button
+          </motion.div>
+          <motion.button
+            whileTap={{ scale: 0.8 }}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -34,7 +43,7 @@ export function ToolCard({ tool }: ToolCardProps) {
             className="p-1.5 rounded-md text-zinc-500 hover:text-amber-400 transition"
           >
             <Star className={`w-4 h-4 ${fav ? "fill-amber-400 text-amber-400" : ""}`} />
-          </button>
+          </motion.button>
         </div>
 
         <Link href={tool.route} className="block focus:outline-none">
@@ -59,6 +68,6 @@ export function ToolCard({ tool }: ToolCardProps) {
           Open Tool
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 }

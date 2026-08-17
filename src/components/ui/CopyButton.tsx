@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Copy, Check } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 import { useToast } from "./Toast";
 
 interface CopyButtonProps {
@@ -47,18 +48,38 @@ export function CopyButton({
   };
 
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.95 }}
       onClick={handleCopy}
       disabled={!text}
-      title="Copy to clipboard (Ctrl+Shift+C)"
-      className={`inline-flex items-center gap-1.5 rounded-md border border-zinc-700/60 bg-zinc-800/80 hover:bg-zinc-700/80 text-zinc-200 hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed ${buttonPaddings[size]} ${className}`}
+      title="Copy to clipboard"
+      className={`inline-flex items-center gap-1.5 rounded-md border border-zinc-700/60 bg-zinc-800/80 hover:bg-zinc-700/80 text-zinc-200 hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${buttonPaddings[size]} ${className}`}
     >
-      {copied ? (
-        <Check className={`${iconSizes[size]} text-emerald-400`} />
-      ) : (
-        <Copy className={`${iconSizes[size]} text-zinc-400 group-hover:text-zinc-200`} />
-      )}
+      <AnimatePresence mode="wait" initial={false}>
+        {copied ? (
+          <motion.span
+            key="check"
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.5, opacity: 0 }}
+            transition={{ duration: 0.12 }}
+          >
+            <Check className={`${iconSizes[size]} text-emerald-400`} />
+          </motion.span>
+        ) : (
+          <motion.span
+            key="copy"
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.5, opacity: 0 }}
+            transition={{ duration: 0.12 }}
+          >
+            <Copy className={`${iconSizes[size]} text-zinc-400`} />
+          </motion.span>
+        )}
+      </AnimatePresence>
       <span>{copied ? "Copied!" : label || "Copy"}</span>
-    </button>
+    </motion.button>
   );
 }

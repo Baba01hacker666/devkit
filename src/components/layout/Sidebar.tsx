@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import * as Icons from "lucide-react";
 import { Star, Clock, ChevronDown, ChevronRight, Home, Sparkles, X } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 import { TOOLS, CATEGORIES } from "@/lib/tools-registry";
 import { useFavorites } from "@/lib/use-favorites";
 import { useRecent } from "@/lib/use-recent";
@@ -153,30 +154,38 @@ export function Sidebar({ isMobileOpen, onCloseMobile }: SidebarProps) {
                     </div>
                   </button>
 
-                  {isExpanded && (
-                    <div className="space-y-0.5 pl-2">
-                      {catTools.map((tool) => {
-                        const IconComp = (Icons as unknown as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
-                        const active = pathname === tool.route;
+                  <AnimatePresence initial={false}>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2, ease: "easeInOut" }}
+                        className="space-y-0.5 pl-2 overflow-hidden"
+                      >
+                        {catTools.map((tool) => {
+                          const IconComp = (Icons as unknown as Record<string, React.ElementType>)[tool.iconName] || Icons.Wrench;
+                          const active = pathname === tool.route;
 
-                        return (
-                          <Link
-                            key={tool.id}
-                            href={tool.route}
-                            onClick={onCloseMobile}
-                            className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg transition ${
-                              active
-                                ? "bg-blue-600/15 text-blue-400 font-semibold border border-blue-500/30"
-                                : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
-                            }`}
-                          >
-                            <IconComp className={`w-3.5 h-3.5 shrink-0 ${active ? "text-blue-400" : "text-zinc-400"}`} />
-                            <span className="truncate">{tool.name}</span>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  )}
+                          return (
+                            <Link
+                              key={tool.id}
+                              href={tool.route}
+                              onClick={onCloseMobile}
+                              className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg transition ${
+                                active
+                                  ? "bg-blue-600/15 text-blue-400 font-semibold border border-blue-500/30"
+                                  : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
+                              }`}
+                            >
+                              <IconComp className={`w-3.5 h-3.5 shrink-0 ${active ? "text-blue-400" : "text-zinc-400"}`} />
+                              <span className="truncate">{tool.name}</span>
+                            </Link>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               );
             })}
@@ -193,24 +202,38 @@ export function Sidebar({ isMobileOpen, onCloseMobile }: SidebarProps) {
         {SidebarContent}
       </aside>
 
-      {/* Mobile Drawer */}
-      {isMobileOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-sm flex">
-          <div className="w-72 bg-zinc-950 border-r border-zinc-800 h-full flex flex-col relative animate-in slide-in-from-left duration-200">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
-              <span className="font-bold text-sm text-zinc-100">DevKit Navigation</span>
-              <button
-                onClick={onCloseMobile}
-                className="p-1 rounded-md text-zinc-400 hover:text-zinc-200"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            {SidebarContent}
+      {/* Mobile Drawer with AnimatePresence */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <div className="md:hidden fixed inset-0 z-40 flex">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={onCloseMobile}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", stiffness: 400, damping: 35 }}
+              className="w-72 bg-zinc-950 border-r border-zinc-800 h-full flex flex-col relative z-50 shadow-2xl"
+            >
+              <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
+                <span className="font-bold text-sm text-zinc-100">DevKit Navigation</span>
+                <button
+                  onClick={onCloseMobile}
+                  className="p-1 rounded-md text-zinc-400 hover:text-zinc-200"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              {SidebarContent}
+            </motion.div>
           </div>
-          <div className="flex-1" onClick={onCloseMobile} />
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 }

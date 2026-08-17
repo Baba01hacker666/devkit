@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { CheckCircle2, AlertCircle, Info, X } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 export type ToastType = "success" | "error" | "info";
 
@@ -38,32 +39,38 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={{ toast }}>
       {children}
       <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full px-4 pointer-events-none">
-        {toasts.map((t) => (
-          <div
-            key={t.id}
-            className={`pointer-events-auto flex items-start gap-3 p-3.5 rounded-lg border shadow-xl backdrop-blur-md transition-all duration-300 animate-in slide-in-from-bottom-5 ${
-              t.type === "success"
-                ? "bg-zinc-900/95 border-emerald-500/40 text-zinc-100"
-                : t.type === "error"
-                ? "bg-zinc-900/95 border-rose-500/40 text-zinc-100"
-                : "bg-zinc-900/95 border-blue-500/40 text-zinc-100"
-            }`}
-          >
-            {t.type === "success" && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />}
-            {t.type === "error" && <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />}
-            {t.type === "info" && <Info className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />}
-            <div className="flex-1 text-sm">
-              <p className="font-semibold text-zinc-100 leading-tight">{t.title}</p>
-              {t.description && <p className="text-zinc-400 text-xs mt-1">{t.description}</p>}
-            </div>
-            <button
-              onClick={() => removeToast(t.id)}
-              className="text-zinc-500 hover:text-zinc-300 p-0.5 rounded transition"
+        <AnimatePresence mode="popLayout">
+          {toasts.map((t) => (
+            <motion.div
+              key={t.id}
+              initial={{ opacity: 0, y: 16, scale: 0.94 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9, y: 10 }}
+              transition={{ type: "spring", stiffness: 450, damping: 30 }}
+              className={`pointer-events-auto flex items-start gap-3 p-3.5 rounded-xl border shadow-xl backdrop-blur-md transition-colors ${
+                t.type === "success"
+                  ? "bg-zinc-900/95 border-emerald-500/40 text-zinc-100"
+                  : t.type === "error"
+                  ? "bg-zinc-900/95 border-rose-500/40 text-zinc-100"
+                  : "bg-zinc-900/95 border-blue-500/40 text-zinc-100"
+              }`}
             >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        ))}
+              {t.type === "success" && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />}
+              {t.type === "error" && <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />}
+              {t.type === "info" && <Info className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />}
+              <div className="flex-1 text-sm">
+                <p className="font-semibold text-zinc-100 leading-tight">{t.title}</p>
+                {t.description && <p className="text-zinc-400 text-xs mt-1">{t.description}</p>}
+              </div>
+              <button
+                onClick={() => removeToast(t.id)}
+                className="text-zinc-500 hover:text-zinc-300 p-0.5 rounded transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </ToastContext.Provider>
   );

@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { animate } from "animejs";
 import { ToolHeader } from "@/components/ui/ToolHeader";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { RefreshCw, Key, AlertCircle } from "lucide-react";
@@ -99,9 +101,18 @@ export function PasswordGeneratorTool() {
   const [passwords, setPasswords] = useState<string[]>(() =>
     generatePasswords(DEFAULT_OPTS)
   );
+  const listRef = useRef<HTMLDivElement | null>(null);
 
   const handleGenerate = () => {
     setPasswords(generatePasswords({ length, count, useUpper, useLower, useDigits, useSymbols, excludeAmbiguous }));
+    if (listRef.current) {
+      animate(listRef.current, {
+        opacity: [0.4, 1],
+        translateY: [-4, 0],
+        duration: 250,
+        ease: "easeOutQuad",
+      });
+    }
   };
 
   const noCharsetSelected = !(useUpper || useLower || useDigits || useSymbols);
@@ -176,14 +187,16 @@ export function PasswordGeneratorTool() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.96 }}
             onClick={handleGenerate}
             disabled={noCharsetSelected}
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow transition disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             <span>Generate</span>
-          </button>
+          </motion.button>
 
           <CopyButton
             text={passwords.join("\n")}
@@ -201,19 +214,25 @@ export function PasswordGeneratorTool() {
       )}
 
       {/* Generated list */}
-      <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
-        {passwords.map((pw, idx) => (
-          <div
-            key={idx}
-            className="flex items-center justify-between p-3 bg-zinc-900/60 border border-zinc-800 hover:border-zinc-700 rounded-xl transition"
-          >
-            <div className="flex items-center gap-3 min-w-0">
-              <Key className="w-4 h-4 text-blue-400 shrink-0" />
-              <span className="font-mono text-xs text-zinc-100 select-all break-all">{pw}</span>
-            </div>
-            <CopyButton text={pw} size="sm" toastMessage="Password copied!" />
-          </div>
-        ))}
+      <div ref={listRef} className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
+        <AnimatePresence mode="popLayout">
+          {passwords.map((pw, idx) => (
+            <motion.div
+              key={`${pw}-${idx}`}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              className="flex items-center justify-between p-3 bg-zinc-900/60 border border-zinc-800 hover:border-zinc-700 rounded-xl transition"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <Key className="w-4 h-4 text-blue-400 shrink-0" />
+                <span className="font-mono text-xs text-zinc-100 select-all break-all">{pw}</span>
+              </div>
+              <CopyButton text={pw} size="sm" toastMessage="Password copied!" />
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </div>
   );
